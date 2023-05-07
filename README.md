@@ -1,2 +1,2 @@
 # Cpp_BOJ
-This is a auto push repository for Baekjoon Online Judge created with [BaekjoonHub](https://github.com/BaekjoonHub/BaekjoonHub).
+BOJ(백준) C++ 코테 기록용 Repository입니다.
