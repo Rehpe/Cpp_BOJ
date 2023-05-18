@@ -5,14 +5,6 @@ int N;
 int x, y;
 vector<pair<int, int>> coord;
 
-bool cmp(pair<int, int> a, pair<int, int>b)
-{
-	if (a.first == b.first)
-		return a.second < b.second;
-	else
-		return a.first < b.first;
-}
-
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -27,7 +19,7 @@ int main()
 		coord.push_back(make_pair(x, y));
 	}
 
-	sort(coord.begin(), coord.end(), cmp);
+	sort(coord.begin(), coord.end());
 
 	for (int i = 0; i < N; i++)
 	{
