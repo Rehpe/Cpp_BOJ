@@ -1,8 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-
 int N;
-
 int go(int i)
 {
 	int j = 1;
