@@ -5,7 +5,7 @@ int N;
 string s;
 vector<string> vec;
 
-bool cmp(string a, string b)
+bool cmp(string& a, string& b)
 {
 	if (a.size() == b.size())
 		return a < b;
