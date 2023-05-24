@@ -1,10 +1,9 @@
 #include <bits/stdc++.h>
-#include <unordered_map>
 using namespace std;
 
 int N, M;
-unordered_map<int, int> ans;
 int num;
+vector<int> card;
 
 int main()
 {
@@ -17,17 +16,15 @@ int main()
 	for (int i = 0; i < N; i++)
 	{
 		cin >> num;
-		if (ans.find(num) != ans.end())
-			ans[num]++;
-		else
-			ans.insert({num, 1});
+		card.push_back(num);
 	}
+	sort(card.begin(), card.end());
 
 	cin >> M;
 	for (int i = 0; i < M; i++)
 	{
 		cin >> num;
-		cout << ans[num] << " ";
+		cout << upper_bound(card.begin(), card.end(), num) -
+			lower_bound(card.begin(), card.end(), num) << " ";
 	}
-
 }
