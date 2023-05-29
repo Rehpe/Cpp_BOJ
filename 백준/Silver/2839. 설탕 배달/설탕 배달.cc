@@ -4,26 +4,6 @@ using namespace std;
 int N;
 int dp[5001];
 
-int go(int x)	// x 킬로그램의 설탕을 구성하는 최소 봉지수
-{
-	if (x == 1 || x == 2 || x == 4)	// 3,5키로 봉지로 구성할 수 없는 숫자의 경우 최대수 반환
-		return 99999;
-
-	else if (x == 3 || x == 5)	// 3, 5키로 봉지의 경우 1이 최소값
-		return 1;
-	
-	else if (dp[x] != 0)	// x에 대한 최소 봉지 수가 기록되어있다면 해당 값 반환
-		return dp[x];
-	
-	else
-	{
-		// x kg를 구성하는 봉지의 최소 개수: 
-		// x-3 kg를 구성하는 최소수 +1 혹은 x-5 kg를 구성하는 최소수 +1 중 작은 쪽
-		dp[x] = min(go(x - 3) + 1, go(x - 5) + 1);
-		return dp[x];
-	}
-}
-
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -32,10 +12,16 @@ int main()
 
 	cin >> N;
 	
-	int ret = go(N);
+	dp[0] = dp[1] = dp[2] = dp[4] = 9999;
+	dp[3] = dp[5] = 1;
 
-	if (ret >= 9999)
+	for (int i = 6; i < N + 1; i++)
+	{
+		dp[i] = min(dp[i - 3] + 1, dp[i - 5] + 1);
+	}
+
+	if (dp[N] >= 9999)
 		cout << -1;
 	else
-		cout << ret;
+		cout << dp[N];
 }
