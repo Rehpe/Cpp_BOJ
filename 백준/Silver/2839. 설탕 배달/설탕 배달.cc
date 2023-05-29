@@ -2,7 +2,7 @@
 using namespace std;
 
 int N;
-int dp[5001];
+int ret;
 
 int main()
 {
@@ -12,16 +12,23 @@ int main()
 
 	cin >> N;
 	
-	dp[0] = dp[1] = dp[2] = dp[4] = 9999;
-	dp[3] = dp[5] = 1;
-
-	for (int i = 6; i < N + 1; i++)
+	while (true)
 	{
-		dp[i] = min(dp[i - 3] + 1, dp[i - 5] + 1);
-	}
+		if (N % 5 == 0)	// N이 5의 배수일 때
+		{
+			ret += N / 5;	// 결과값에 5로 나눈 수 추가
+			cout << ret;	
+			break;
+		}
+		
+		// N이 5의 배수가 아니라면, 3을 빼고 결과값에 1 추가 (3kg 설탕 한봉지 추가)
+		N -= 3;
+		ret++;
 
-	if (dp[N] >= 9999)
-		cout << -1;
-	else
-		cout << dp[N];
+		if (N < 0)	// N이 음수가 되었다면 -> 구성 불가능, -1 출력
+		{
+			cout << -1;
+			break;
+		}
+	}
 }
