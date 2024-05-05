@@ -15,7 +15,7 @@ int dx[] = {  0,  1, 1, 1, 0, -1, -1,-1 };
 
 int living_tree;
 
-void spring()
+void work()
 {
 	// 칸에서 어린 나무부터 자기 나이만큼의 양분을 먹고 나이가 1 증가함
 	// 양분을 먹을 수 없는 나무는 죽는다
@@ -65,7 +65,7 @@ void spring()
 	}
 }
 
-void autumn()
+void reproduction()
 {
 	// 나이가 5의 배수인 나무가 인접 8칸에 번식함
 	for (auto coord : five_multi_tree)
@@ -89,22 +89,6 @@ void autumn()
 	five_multi_tree.clear();
 }
 
-void winter()
-{
-	//living_tree = 0; 
-
-	// 땅에 양분 추가
-	for (int i = 1; i <= n; i++)
-	{
-		for (int j = 1; j <= n; j++)
-		{
-			ground[i][j] += yangbun[i][j];
-
-			// 한 칸의 모든 나무 세기
-			//living_tree += trees[i][j].size();
-		}
-	}
-}
 
 int counting_trees()
 {
@@ -125,10 +109,8 @@ void growing_trees(int year)
 {
 	while (year--)
 	{
-		spring();
-		//summer();
-		autumn();
-		//winter();
+		work();
+		reproduction();
 	}
 }
 
@@ -159,7 +141,6 @@ int main()
 
 	growing_trees(k);
 	cout << counting_trees();
-	//cout << living_tree;
 
 	return 0;
 }
