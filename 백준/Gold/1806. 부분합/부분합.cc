@@ -2,24 +2,40 @@
 
 using namespace std;
 
-int main() {
-	int n, s;
+int n, s;
+int arr[100001];
+
+int main()
+{
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
+
 	cin >> n >> s;
-	vector<int> arr(n);
-	for (int i = 0; i < n; i++)	// 배열 입력
+
+	for (int i = 0; i < n; i++)
+	{
 		cin >> arr[i];
-	
-	int start = 0, end = 0, sum = 0, minLen = 0x7FFFFFF;
-	while (start <= end) {
-		if (sum >= s) {	// 현재 포인터의 합이 s보다 크거나 같으면 start ++
-			minLen = min(minLen,end - start);	// 가장 짧은 길이만 저장
-			sum -= arr[start++];
-		}
-		else if (end == n) break;
-		else sum += arr[end++];	// end++ 함으로써 sum 증가
 	}
 
-	if (minLen == 0x7FFFFFF) cout << 0 << endl;	// 불가능 하면 0 출력
-	else cout << minLen << endl;
+	int start = 0;
+	int end = 0;
+	int sum = 0;
+	int minLen = INT_MAX;
+
+	while (start <= end)
+	{
+		if (sum >= s)
+		{
+			minLen = min(minLen, end - start);
+			sum -= arr[start++];
+		}
+		else if (end == n) break; 
+		else
+			sum += arr[end++];
+	}
+
+	if (minLen == INT_MAX) cout << 0;
+	else cout << minLen;
+
 	return 0;
 }
