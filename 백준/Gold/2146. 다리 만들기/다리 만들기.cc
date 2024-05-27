@@ -1,83 +1,126 @@
-#include <iostream>
-#include <algorithm>
-#include <vector>
-#include <queue>
-#include <utility>
-#define MAX 102
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int board[MAX][MAX];
-bool check[MAX][MAX];
-int dx[4] = { -1,1,0,0 };
-int dy[4] = { 0,0,-1,1 };
-int num = 1,N;
+int n;
+int maps[101][101];
+int visited[101][101];
 queue<pair<int, int>> q;
-vector<pair<int, int>> vp;
+vector<pair<int, int>> edges;
+int ans = INT_MAX;
 
-int bfs(int x, int y) {
-	int dist[MAX][MAX] = { 0, };
-	int mindist = 1e8;
-	q.push({ x,y });
-	dist[x][y] = 0;
-	while (!q.empty()) {
-		auto cur = q.front();
+int dy[] = { 0, 0, 1, -1 };
+int dx[] = { 1, -1, 0, 0 };
+
+
+void label(int y, int x, int cnt)
+{
+	q.push({ y, x });
+	visited[y][x] = 1;
+	maps[y][x] = cnt;
+
+	while (q.size())
+	{
+		int y, x;
+		tie(y, x) = q.front();
 		q.pop();
-		for (int k = 0; k < 4; k++) {
-			int nx = cur.first + dx[k];
-			int ny = cur.second + dy[k];
-			if (nx < 0 || nx >= N || ny < 0 || ny >= N) continue;
-			if (dist[nx][ny] != 0) continue;
-			if (board[nx][ny] == board[x][y]) continue;
-			if (board[nx][ny] != board[x][y] && board[nx][ny] != 0) {
-				mindist = min(mindist, dist[cur.first][cur.second]);
+
+		for (int i = 0; i < 4; i++)
+		{
+			int ny = y + dy[i];
+			int nx = x + dx[i];
+			if (ny < 0 || nx < 0 || ny >= n || nx >= n) continue;
+			if (visited[ny][nx]) continue;
+			if (maps[ny][nx] == 0)
+			{
+				// 한 면이 바다라면
+				edges.push_back({ y,x });
 				continue;
 			}
-			dist[nx][ny] = dist[cur.first][cur.second] + 1;
-			q.push({ nx,ny });
-		}
-	}
-	return mindist;
-}
-int main() {
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	cin >> N;
-	for (int i = 0; i < N; i++)
-		for (int j = 0; j < N; j++)
-			cin >> board[i][j];
 
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++) {
-			if (board[i][j] == 1 && check[i][j] == false) {
-				q.push({ i,j });
-				check[i][j] = 1;
-				board[i][j] = num;
-				while (!q.empty()) {
-					auto cur = q.front();
-					q.pop();
-					for (int k= 0; k < 4; k++) {
-						int nx = cur.first + dx[k];
-						int ny = cur.second + dy[k];
-						if (nx < 0 || nx >= N || ny < 0 || ny >= N) continue;
-						if (check[nx][ny]) continue;
-						if (board[nx][ny] == 0) {
-							vp.push_back({ cur.first,cur.second });
-							continue;
-						}
-						check[nx][ny] = 1;
-						board[nx][ny] = num;
-						q.push({ nx,ny });
-					}
-				}
-				num++;
-			}
+			visited[ny][nx] = 1;
+			maps[ny][nx] = cnt;
+			q.push({ ny, nx });
 		}
 	}
-    sort(vp.begin(),vp.end());
-	vp.erase(unique(vp.begin(), vp.end()), vp.end());
-	int resultdist = 1e9;
-	for (int i = 0; i < vp.size(); i++) {
-		resultdist = min(resultdist,bfs(vp[i].first, vp[i].second));
+}
+
+void build(int y, int x, int islandnum)
+{
+	int dist[101][101] = { 0, };
+
+	q.push({ y, x });
+
+	while (q.size())
+	{
+		int y, x;
+		tie(y, x) = q.front();
+		q.pop();
+
+		for (int i = 0; i < 4; i++)
+		{
+			int ny = y + dy[i];
+			int nx = x + dx[i];
+
+			if (ny < 0 || nx < 0 || ny >= n || nx >= n) continue;
+			if (dist[ny][nx]) continue;
+			if (maps[ny][nx] == islandnum) continue;	// 본인 섬 육지라면 
+			if (visited[y][x] + 1 > ans) continue;
+
+			// 현재 칸이 바다도 아니고, 시작 섬도 아니라면
+			if (maps[ny][nx] != 0 && maps[ny][nx] != islandnum)
+			{
+				// 다른 섬에 도착한 것임
+				ans = min(ans, dist[y][x]);
+				continue;
+			}
+
+			dist[ny][nx] = dist[y][x] + 1;
+			q.push({ ny, nx });
+		}
 	}
-	cout << resultdist;
+}
+
+int main()
+{
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
+
+	cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			cin >> maps[i][j];
+		}
+	}
+
+	int cnt = 1;
+
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			if (maps[i][j] == 0) continue;
+			if (visited[i][j]) continue;
+
+			label(i, j, cnt);
+			cnt++;
+		}
+	}
+			
+
+	sort(edges.begin(), edges.end());
+	edges.erase(unique(edges.begin(), edges.end()), edges.end());
+
+	for (int i = 0; i < edges.size(); i++)
+	{
+		int y, x;
+		tie(y, x) = edges[i];
+		build(y, x, maps[y][x]);
+	}
+
+	cout << ans;
+
+	return 0;
 }
