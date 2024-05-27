@@ -65,7 +65,7 @@ void build(int y, int x, int islandnum)
 			if (ny < 0 || nx < 0 || ny >= n || nx >= n) continue;
 			if (dist[ny][nx]) continue;
 			if (maps[ny][nx] == islandnum) continue;	// 본인 섬 육지라면 
-			if (visited[y][x] + 1 > ans) continue;
+			if (dist[y][x] + 1 > ans) continue;
 
 			// 현재 칸이 바다도 아니고, 시작 섬도 아니라면
 			if (maps[ny][nx] != 0 && maps[ny][nx] != islandnum)
